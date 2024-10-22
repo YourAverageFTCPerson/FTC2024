@@ -27,7 +27,7 @@ public class ConceptViperSlide extends LinearOpMode { // 4 stage 336 mm
     private static final double FULL_EXTENSION = 8.13333333333;
 
     @EffectivelyFinal
-    private static boolean USING_223 = true;
+    private static Boolean USING_223;
 
     @Override
     public void runOpMode() {

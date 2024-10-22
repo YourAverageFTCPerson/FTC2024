@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
 @TeleOp(name = "Main", group = "Official")
 public class Main extends LinearOpMode {
     @EffectivelyFinal
-    public static boolean IS_BLUE_ALLIANCE;
+    public static Boolean IS_BLUE_ALLIANCE;
 
     @Override
     public void runOpMode() {
