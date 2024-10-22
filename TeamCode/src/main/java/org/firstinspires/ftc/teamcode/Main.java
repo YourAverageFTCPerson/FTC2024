@@ -7,6 +7,8 @@ import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
 
 /**
  * Program entry point for competition.
+ *
+ * TODO TensorFlow for Auto Specimens
  */
 @TeleOp(name = "Main", group = "Official")
 public class Main extends LinearOpMode {
