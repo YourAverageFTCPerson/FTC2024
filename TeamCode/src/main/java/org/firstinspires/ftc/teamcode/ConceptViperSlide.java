@@ -24,7 +24,7 @@ public class ConceptViperSlide extends LinearOpMode { // 4 stage 336 mm
 
     private static final float YELLOW_JACKET_223_PPR = 751.8f * CONVERSION;
 
-    private static final double FULL_EXTENSION = 8.13333333333;
+    private static final double REVOLUTIONS_FOR_FULL_EXTENSION = 8.13333333333;
 
     @EffectivelyFinal
     private static Boolean USING_223;
@@ -32,15 +32,16 @@ public class ConceptViperSlide extends LinearOpMode { // 4 stage 336 mm
     @Override
     public void runOpMode() {
         this.motor = this.hardwareMap.get(DcMotor.class, "viperMotor");
+        final int fullExtension = (int) Math.round(REVOLUTIONS_FOR_FULL_EXTENSION * (USING_223 ? YELLOW_JACKET_223_PPR : YELLOW_JACKET_312_PPR));
         this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.motor.setPower(0d);
+        this.motor.setPower(0.0);
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor.setTargetPosition(0); // Return to original position
         this.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.waitForStart();
         while (this.opModeIsActive()) {
             if (this.gamepad1.a) {
-                this.motor.setTargetPosition((int) Math.round(FULL_EXTENSION * (USING_223 ? YELLOW_JACKET_223_PPR : YELLOW_JACKET_312_PPR)));
+                this.motor.setTargetPosition(fullExtension);
             } else {
                 this.motor.setTargetPosition(0);
             }
