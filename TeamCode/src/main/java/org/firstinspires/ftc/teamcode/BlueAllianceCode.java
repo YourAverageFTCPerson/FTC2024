@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-public class BlueAllianceCode {
-    public static void run(OpMode opMode) {
+@TeleOp(name = "Blue Alliance TeleOp", group = "Competition")
+public class BlueAllianceCode extends LinearOpMode {
+    @Override
+    public void runOpMode() {
         // TODO
     }
 }
