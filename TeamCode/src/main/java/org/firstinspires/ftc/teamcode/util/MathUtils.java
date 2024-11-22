@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.util;
 
-import java.util.Arrays;
-
 /**
  * @author YourAverageFTCPerson
  */
@@ -79,10 +77,28 @@ public class MathUtils {
                                TAG_15_ORIENTATION = -TAU / 4.0,
                                TAG_16_ORIENTATION = 0.0;
 
+    public static double getFieldAprilTagOrientation(int id) {
+        switch (id) {
+            case 11:
+                return TAG_11_ORIENTATION;
+            case 12:
+                return TAG_12_ORIENTATION;
+            case 13:
+                return TAG_13_ORIENTATION;
+            case 14:
+                return TAG_14_ORIENTATION;
+            case 15:
+                return TAG_15_ORIENTATION;
+            case 16:
+                return TAG_16_ORIENTATION;
+            default:
+                throw new IllegalArgumentException("Tag: '" + id + "' isn't on the field. Only standard field tags are supported.");
+        }
+    }
+
     public static double[] calculateRobotPosition(double relativeX, double relativeY,
                                                   double aprilTagOrientation, double aprilTagX, double aprilTagY) {
-        double[] predictedCoordinates = rotate2DVector(-aprilTagOrientation, relativeX, relativeY); // Intellij is smart enough to inline the negative negative. Right?
-        System.out.println("predictedCoordinates: " + Arrays.toString(predictedCoordinates));
+        double[] predictedCoordinates = rotate2DVector(-aprilTagOrientation, relativeX, relativeY); // IntelliJ is smart enough to inline the negative negative. Right?
         return new double[] { aprilTagX + predictedCoordinates[0], aprilTagY + predictedCoordinates[1] };
     }
 }
