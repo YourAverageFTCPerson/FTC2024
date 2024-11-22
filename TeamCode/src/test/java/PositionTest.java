@@ -7,16 +7,16 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * [MethodUnderTest]_[Scenario]_[ExpectedResult]
+ * <a href="https://google.github.io/styleguide/javaguide.html#s5.2.3-method-names">Google recommendation for naming of tests</a>
  */
 public class PositionTest {
     @Test
-    public void multiplyMatrixVector_2DInput_Multiplies() {
+    public void multiplyMatrixVector_2DInput() {
         assertEquals(List.of(23.0, 34.0), List.of(Arrays.stream(MathUtils.multiplyMatrixVector(new double[][] {{1.0,3.0}, {2.0,4.0}}, new double[] {5.0,6.0})).boxed().toArray(Double[]::new)));
     }
 
     @Test
-    public void calculateRobotPosition_NonOrthogonalSituation_Calculates() {
+    public void calculateRobotPosition_nonOrthogonalSituation() {
         // Problem
         double x = 100.0, y = 123.0, aprilTagX = 81.0, aprilTagY = 90.0;
         double aprilTagOrientation = Math.toRadians(50.0);
@@ -27,7 +27,7 @@ public class PositionTest {
     }
 
     @Test
-    public void calculateRobotPosition_OrthogonalSituation_Calculates() {
+    public void calculateRobotPosition_orthogonalSituation() {
         assertEquals(List.of(466.0, 356.0), List.of(Arrays.stream(MathUtils.calculateRobotPosition(-100.0, 10.0, MathUtils.TAG_13_ORIENTATION, 366.0, 366.0)).boxed().toArray(Double[]::new)));
     }
 }
