@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import java.util.Arrays;
+
 /**
  * @author YourAverageFTCPerson
  */
@@ -62,9 +64,25 @@ public class MathUtils {
         return multiplyMatrixVector(createRotationMatrix(angle), x, y);
     }
 
+    /**
+     * The circumference of a circle of radius 1 or a full turn in radians.
+     */
+    public static final double TAU = 2.0 * Math.PI;
+
+    /**
+     * <a href="https://ftc-docs.firstinspires.org/en/latest/_images/45-ITD-tag-numbers.png">From this picture.</a>
+     */
+    public static final double TAG_11_ORIENTATION = 0.0,
+                               TAG_12_ORIENTATION = -TAU / 4.0,
+                               TAG_13_ORIENTATION = TAU / 2.0,
+                               TAG_14_ORIENTATION = TAU / 2.0,
+                               TAG_15_ORIENTATION = -TAU / 4.0,
+                               TAG_16_ORIENTATION = 0.0;
+
     public static double[] calculateRobotPosition(double relativeX, double relativeY,
                                                   double aprilTagOrientation, double aprilTagX, double aprilTagY) {
         double[] predictedCoordinates = rotate2DVector(-aprilTagOrientation, relativeX, relativeY); // Intellij is smart enough to inline the negative negative. Right?
-        return new double[] { aprilTagX - predictedCoordinates[0], aprilTagY - predictedCoordinates[1] };
+        System.out.println("predictedCoordinates: " + Arrays.toString(predictedCoordinates));
+        return new double[] { aprilTagX + predictedCoordinates[0], aprilTagY + predictedCoordinates[1] };
     }
 }

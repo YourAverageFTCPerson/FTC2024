@@ -35,8 +35,13 @@ public class PositionTest {
         double x = 100.0, y = 123.0, aprilTagX = 81.0, aprilTagY = 90.0;
         double aprilTagOrientation = Math.toRadians(50.0);
 
-        double[] relativeCoordinates = MathUtils.rotate2DVector(aprilTagOrientation, aprilTagX - x, aprilTagY - y);
+        double[] relativeCoordinates = MathUtils.rotate2DVector(aprilTagOrientation, x - aprilTagX, y - aprilTagY);
         // Solution
         assertEquals(List.of(x, y), List.of(Arrays.stream(MathUtils.calculateRobotPosition(relativeCoordinates[0], relativeCoordinates[1], aprilTagOrientation, aprilTagX, aprilTagY)).boxed().toArray(Double[]::new)));
+    }
+
+    @Test
+    public void test2() {
+        System.out.println(List.of(Arrays.stream(MathUtils.calculateRobotPosition(-100.0, 10.0, MathUtils.TAG_11_ORIENTATION, 366.0, 366.0)).boxed().toArray(Double[]::new)));
     }
 }
