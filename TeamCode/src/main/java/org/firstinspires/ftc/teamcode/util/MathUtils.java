@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
 /**
  * @author YourAverageFTCPerson
  */
@@ -100,5 +102,11 @@ public class MathUtils {
                                                   double aprilTagOrientation, double aprilTagX, double aprilTagY) {
         double[] predictedCoordinates = rotate2DVector(-aprilTagOrientation, relativeX, relativeY); // IntelliJ is smart enough to inline the negative negative. Right?
         return new double[] { aprilTagX + predictedCoordinates[0], aprilTagY + predictedCoordinates[1] };
+    }
+
+    public static double[] calculateRobotPosition(AprilTagDetection detection) {
+        return calculateRobotPosition(detection.ftcPose.x, detection.ftcPose.y,
+                MathUtils.getFieldAprilTagOrientation(detection.id),
+                detection.metadata.fieldPosition.get(0), detection.metadata.fieldPosition.get(1));
     }
 }
