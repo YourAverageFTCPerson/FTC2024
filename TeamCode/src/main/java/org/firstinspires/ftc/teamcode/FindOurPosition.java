@@ -37,10 +37,12 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDir
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.util.Arrays;
 import java.util.List;
 
 @TeleOp
@@ -177,11 +179,10 @@ public class FindOurPosition extends LinearOpMode {
                 telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
                 telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
-                double aprilTagX = detection.metadata.fieldPosition.get(0);
-                double aprilTagY = detection.metadata.fieldPosition.get(1);
-                double aprilTagZ = detection.metadata.fieldPosition.get(2);
-                double robotX = detection.ftcPose.x / detection.ftcPose.yaw + aprilTagX, robotY = detection.ftcPose.y / detection.ftcPose.yaw + aprilTagY, robotZ = detection.ftcPose.z / detection.ftcPose.yaw + aprilTagZ;
-                telemetry.addLine("ROBOT POSITION: x = " + robotX + ", y = " + robotY + ", z = " + robotZ);
+                telemetry.addLine("ROBOT POSITION [x, y]: " +
+                        Arrays.toString(MathUtils.calculateRobotPosition(detection.ftcPose.x, detection.ftcPose.y,
+                                MathUtils.getFieldAprilTagOrientation(detection.id),
+                                detection.metadata.fieldPosition.get(0), detection.metadata.fieldPosition.get(1))));
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
