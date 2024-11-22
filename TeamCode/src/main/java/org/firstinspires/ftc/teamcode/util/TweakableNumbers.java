@@ -128,6 +128,7 @@ public class TweakableNumbers extends LinearOpMode {
             if (!opModeIsActive()) {
                 break;
             }
+            sleep(50L); // Don't destroy the CPU
         }
     }
 }

@@ -15,7 +15,7 @@ import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
 public class ConceptViperSlide extends LinearOpMode { // 4 stage 336 mm
     private DcMotor motor; // 2 223s, 1 312
 
-    private static int CONVERSION = 4;
+    private static final int CONVERSION = 4;
 
     /**
      * From goBUILDA website.

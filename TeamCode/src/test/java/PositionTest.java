@@ -1,5 +1,6 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,7 +14,8 @@ public class PositionTest {
         double secondColumnY = matrix[1][1] * vector[1];
         return new double[] {firstColumnX + secondColumnX, secondColumnY + firstColumnY};
     }
-    public double[] rotate2DVector(double angle, double[] vector) {
+
+    public static double[] rotate2DVector(double angle, double[] vector) {
         angle = -angle;
         double[][] rotationMatrix = {
                 {Math.cos(angle), Math.sin(angle)},
@@ -29,18 +31,12 @@ public class PositionTest {
 
     @Test
     public void test() {
-        double[] problem = extracted();
-        double yaw = problem[0], range = problem[1];
-        // Solution
-        double x = range * Math.cos(yaw), y = range * Math.sin(yaw);
-        double[] predictedCoordinates = rotate2DVector(problem[2], new double[] {x,y});
-        System.out.println(Arrays.toString(predictedCoordinates));
-    }
+        // Problem
+        double x = 100.0, y = 123.0, aprilTagX = 81.0, aprilTagY = 90.0;
+        double aprilTagOrientation = Math.toRadians(50.0);
 
-    private static double[] extracted() {
-        double x = 100, y = 123, aprilTagX = 81, aprilTagY = 90;
-        double aprilTagOrientation = 50 * Math.PI/180;
-        double a = aprilTagX - x, c = aprilTagY - y, b = Math.sqrt(a*a+c*c);
-        return new double[] {Math.acos((a*a+b*b-c*c)/(2*a*b)), b, aprilTagOrientation};
+        double[] relativeCoordinates = MathUtils.rotate2DVector(aprilTagOrientation, aprilTagX - x, aprilTagY - y);
+        // Solution
+        assertEquals(List.of(x, y), List.of(Arrays.stream(MathUtils.calculateRobotPosition(relativeCoordinates[0], relativeCoordinates[1], aprilTagOrientation, aprilTagX, aprilTagY)).boxed().toArray(Double[]::new)));
     }
 }
