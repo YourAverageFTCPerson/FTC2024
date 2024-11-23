@@ -104,7 +104,7 @@ public class ConceptEasyOpenCV extends LinearOpMode {
             this.color = color;
             this.faceCascade = new CascadeClassifier();
 
-            this.faceCascade.load(hardwareMap.appContext.getFilesDir().getPath() + "/res/haarcascade_frontalface_alt.xml");
+            this.faceCascade.load("/res/haarcascade_frontalface_alt.xml"); // According to ChatGPT, /res/ is the location of res
         }
 
         private void detectAndDisplay(Mat frame)
