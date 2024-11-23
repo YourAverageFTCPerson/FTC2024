@@ -124,10 +124,7 @@ public class TweakableNumbers extends LinearOpMode {
         telemetry.addData(NUMBER_FIELD_NAME, NUMBERS);
         telemetry.update();
 
-        while (true) { // Satisfy IntelliJ with non-empty loop.
-            if (!opModeIsActive()) {
-                break;
-            }
+        while (opModeIsActive()) { // Satisfy IntelliJ with non-empty loop.
             sleep(50L); // Don't destroy the CPU
         }
     }

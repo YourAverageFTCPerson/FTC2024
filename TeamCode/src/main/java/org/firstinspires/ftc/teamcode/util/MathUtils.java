@@ -76,7 +76,7 @@ public class MathUtils {
                                TAG_12_ORIENTATION = -TAU / 4.0,
                                TAG_13_ORIENTATION = TAU / 2.0,
                                TAG_14_ORIENTATION = TAU / 2.0,
-                               TAG_15_ORIENTATION = -TAU / 4.0,
+                               TAG_15_ORIENTATION = TAU / 4.0,
                                TAG_16_ORIENTATION = 0.0;
 
     public static double getFieldAprilTagOrientation(int id) {
