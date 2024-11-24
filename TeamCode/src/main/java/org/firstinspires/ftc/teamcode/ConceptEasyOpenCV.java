@@ -91,9 +91,9 @@ public class ConceptEasyOpenCV extends LinearOpMode {
         }
     }
 
-    private class UselessColorBoxDrawingTracker extends OpenCvTracker
+    private static class UselessColorBoxDrawingTracker extends OpenCvTracker
     {
-        private Scalar color;
+        private final Scalar color;
 
         private int absoluteFaceSize;
 
