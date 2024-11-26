@@ -19,6 +19,9 @@ import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+/**
+ * From the OpenCV Java Tutorial.
+ */
 @TeleOp(name = "Face Detector Because Yes", group = "Concept")
 public class FaceDetectorBecauseYes extends LinearOpMode {
     OpenCvWebcam webcam;
@@ -98,7 +101,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             this.color = color;
             this.faceCascade = new CascadeClassifier();
 
-            this.faceCascade.load("/res/lbpcascade_frontalface_alt.xml"); // According to ChatGPT, /res/ is the location of res
+            this.faceCascade.load("/res/lbpcascade_frontalface.xml"); // According to ChatGPT, /res/ is the location of res
         }
 
         private void detectAndDisplay(Mat frame) {
@@ -119,7 +122,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             }
 
             // detect faces
-            this.faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, 0 | Objdetect.CASCADE_SCALE_IMAGE,
+            this.faceCascade.detectMultiScale(grayFrame, faces, 1.1, 2, Objdetect.CASCADE_SCALE_IMAGE,
                     new Size(this.absoluteFaceSize, this.absoluteFaceSize), new Size());
 
             // each rectangle in faces is a face: draw them!
