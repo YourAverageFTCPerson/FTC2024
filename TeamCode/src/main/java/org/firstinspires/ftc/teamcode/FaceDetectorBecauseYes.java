@@ -19,8 +19,8 @@ import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp(name = "Concept EasyOpenCV", group = "Concept")
-public class ConceptEasyOpenCV extends LinearOpMode {
+@TeleOp(name = "Face Detector Because Yes", group = "Concept")
+public class FaceDetectorBecauseYes extends LinearOpMode {
     OpenCvWebcam webcam;
     OpenCvTrackerApiPipeline trackerApiPipeline;
     UselessColorBoxDrawingTracker tracker1, tracker2, tracker3;
@@ -44,17 +44,14 @@ public class ConceptEasyOpenCV extends LinearOpMode {
         trackerApiPipeline = new OpenCvTrackerApiPipeline();
         webcam.setPipeline(trackerApiPipeline);
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
+            public void onOpened() {
                 webcam.startStreaming(320, 240, OpenCvCameraRotation.UPRIGHT);
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
                 /*
                  * This will be called if the camera could not be opened
                  */
@@ -79,8 +76,7 @@ public class ConceptEasyOpenCV extends LinearOpMode {
         trackerApiPipeline.addTracker(tracker2);
         trackerApiPipeline.addTracker(tracker3);
 
-        while (!isStarted())
-        {
+        while (!isStarted()) {
             /*
              * If you later want to stop running a tracker on each frame,
              * you can remove it from the trackerApiPipeline like so:
@@ -91,24 +87,21 @@ public class ConceptEasyOpenCV extends LinearOpMode {
         }
     }
 
-    private static class UselessColorBoxDrawingTracker extends OpenCvTracker
-    {
+    private static class UselessColorBoxDrawingTracker extends OpenCvTracker {
         private final Scalar color;
 
         private int absoluteFaceSize;
 
         private final CascadeClassifier faceCascade;
 
-        UselessColorBoxDrawingTracker(Scalar color)
-        {
+        UselessColorBoxDrawingTracker(Scalar color) {
             this.color = color;
             this.faceCascade = new CascadeClassifier();
 
-            this.faceCascade.load("/res/haarcascade_frontalface_alt.xml"); // According to ChatGPT, /res/ is the location of res
+            this.faceCascade.load("/res/lbpcascade_frontalface_alt.xml"); // According to ChatGPT, /res/ is the location of res
         }
 
-        private void detectAndDisplay(Mat frame)
-        {
+        private void detectAndDisplay(Mat frame) {
             MatOfRect faces = new MatOfRect();
             Mat grayFrame = new Mat();
 
@@ -118,11 +111,9 @@ public class ConceptEasyOpenCV extends LinearOpMode {
             Imgproc.equalizeHist(grayFrame, grayFrame);
 
             // compute minimum face size (20% of the frame height, in our case)
-            if (this.absoluteFaceSize == 0)
-            {
+            if (this.absoluteFaceSize == 0) {
                 int height = grayFrame.rows();
-                if (Math.round(height * 0.2f) > 0)
-                {
+                if (Math.round(height * 0.2f) > 0) {
                     this.absoluteFaceSize = Math.round(height * 0.2f);
                 }
             }
@@ -139,8 +130,7 @@ public class ConceptEasyOpenCV extends LinearOpMode {
         }
 
         @Override
-        public Mat processFrame(Mat input)
-        {
+        public Mat processFrame(Mat input) {
 
 //            Imgproc.rectangle(
 //                    input,
