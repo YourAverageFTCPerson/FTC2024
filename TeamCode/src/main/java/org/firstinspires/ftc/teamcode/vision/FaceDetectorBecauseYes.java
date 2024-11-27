@@ -90,7 +90,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
         }
     }
 
-    private static class UselessColorBoxDrawingTracker extends OpenCvTracker {
+    private class UselessColorBoxDrawingTracker extends OpenCvTracker {
         private final Scalar color;
 
         private int absoluteFaceSize;
@@ -101,7 +101,9 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             this.color = color;
             this.faceCascade = new CascadeClassifier();
 
-            this.faceCascade.load("/res/lbpcascade_frontalface.xml"); // According to ChatGPT, /res/ is the location of res
+            // https://stackoverflow.com/questions/6301493/get-path-of-android-resource
+            // https://stackoverflow.com/questions/7977348/how-to-get-uri-of-res-folder
+            this.faceCascade.load("android.resource://" + FaceDetectorBecauseYes.this.hardwareMap.appContext.getPackageName() + "/xml/lbpcascade_frontalface");
         }
 
         private void detectAndDisplay(Mat frame) {

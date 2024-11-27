@@ -4,7 +4,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Target;
 
 /**
- * The annotated value is static, set somewhere else and should be considered final. Should always be a wrapper type if a primitive is required to cause NPE if unset.
+ * Treat as if final if the enclosing method isn't for initialization.
  */
 @Target(ElementType.FIELD)
 public @interface EffectivelyFinal {
