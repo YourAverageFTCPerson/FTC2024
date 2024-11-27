@@ -30,6 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
+import android.util.Base64;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -42,6 +44,8 @@ import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
@@ -180,6 +184,15 @@ public class FindOurPosition extends LinearOpMode {
                 telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (cm, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
                 telemetry.addLine("ROBOT POSITION [x, y]: " + Arrays.toString(MathUtils.calculateRobotPosition(detection)));
+                ByteArrayOutputStream output = new ByteArrayOutputStream();
+                final String TAG = FindOurPosition.class.getSimpleName();
+                try (ObjectOutputStream stream = new ObjectOutputStream(output)) {
+                    stream.writeObject(detection.ftcPose);
+                } catch (Exception e) {
+                    Log.e(TAG, null, e);
+                }
+                String asBase64 = Base64.encodeToString(output.toByteArray(), Base64.DEFAULT);
+                Log.i(TAG, asBase64);
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));

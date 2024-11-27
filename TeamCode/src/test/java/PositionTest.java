@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -29,5 +30,11 @@ public class PositionTest {
     @Test
     public void calculateRobotPosition_orthogonalSituation() {
         assertEquals(List.of(466.0, 356.0), List.of(Arrays.stream(MathUtils.calculateRobotPosition(-100.0, 10.0, MathUtils.TAG_13_ORIENTATION, 366.0, 366.0)).boxed().toArray(Double[]::new)));
+    }
+
+    @Test
+    public void calculateRobotPosition_orthogonalSituation2() {
+
+        System.out.println(MathUtils.calculateRobotPosition(new AprilTagDetection(12, Double.NaN, Float.NaN, null, null, null)));
     }
 }
