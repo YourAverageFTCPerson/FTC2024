@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import android.content.Context;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,6 +20,8 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
+
+import java.io.File;
 
 /**
  * From the OpenCV Java Tutorial.
@@ -103,7 +107,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
 
             // https://stackoverflow.com/questions/6301493/get-path-of-android-resource
             // https://stackoverflow.com/questions/7977348/how-to-get-uri-of-res-folder
-            this.faceCascade.load("android.resource://" + FaceDetectorBecauseYes.this.hardwareMap.appContext.getPackageName() + "/xml/lbpcascade_frontalface");
+            this.faceCascade.load(String.valueOf(new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface")));
         }
 
         private void detectAndDisplay(Mat frame) {
@@ -146,10 +150,13 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
 //                            input.cols()*(3f/4f),
 //                            input.rows()*(3f/4f)),
 //                    color, 4);
-
-            if (!input.empty()) {
-                detectAndDisplay(input);
-            }
+try {
+    if (!input.empty()) {
+        detectAndDisplay(input);
+    }
+} catch (Throwable tr) {
+    telemetry.addData("ERROR", tr.toString());
+}
 
             return input;
         }

@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode.util;
 
+import android.util.Log;
+
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
+import java.util.Arrays;
 
 /**
  * @author YourAverageFTCPerson
@@ -105,6 +109,9 @@ public class MathUtils {
     }
 
     public static double[] calculateRobotPosition(AprilTagDetection detection) {
+        Log.d("MathUtils", Arrays.toString(new Object[] {detection.ftcPose.x, detection.ftcPose.y,
+                MathUtils.getFieldAprilTagOrientation(detection.id),
+                detection.metadata.fieldPosition.get(0), detection.metadata.fieldPosition.get(1)}));
         return calculateRobotPosition(detection.ftcPose.x, detection.ftcPose.y,
                 MathUtils.getFieldAprilTagOrientation(detection.id),
                 detection.metadata.fieldPosition.get(0), detection.metadata.fieldPosition.get(1));
