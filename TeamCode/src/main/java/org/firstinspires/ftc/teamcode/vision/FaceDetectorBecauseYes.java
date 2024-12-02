@@ -105,6 +105,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             this.color = color;
             this.faceCascade = new CascadeClassifier();
 
+            // TODO Actually read the example
             // https://stackoverflow.com/questions/6301493/get-path-of-android-resource
             // https://stackoverflow.com/questions/7977348/how-to-get-uri-of-res-folder
             this.faceCascade.load(String.valueOf(new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface")));
