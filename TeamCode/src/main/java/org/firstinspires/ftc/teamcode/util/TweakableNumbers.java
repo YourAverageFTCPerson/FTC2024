@@ -14,9 +14,9 @@ import java.util.HashMap;
  * {@snippet :
  * import org.firstinspires.ftc.team24388.util.TweakableNumbers;
  * ...
- * // Get the value of the state with only dpad_up of gamepad1 down.
+ * // Get the value of the state with only dpad_down of gamepad1 down.
  * Long temp; // We use temp for a null check.
- * long someRandomValue = (temp = TweakableNumbers.NUMBERS.get("dpad_up ")) == null ? 0L : temp;
+ * long someRandomValue = (temp = TweakableNumbers.NUMBERS.get("dpad_down ")) == null ? 0L : temp;
  * doSomething(someRandomValue);
  * ...
  * }
@@ -32,7 +32,7 @@ public class TweakableNumbers extends LinearOpMode {
      * length is because it contains unpredictable and redundant values there (i.e. joystick
      * position, gamepad ID and user number).
      */
-    private static final int LENGTH_OF_OMISSION = "ID: 1000 user:  1 lx:  0.00 ly:  0.00 rx:  0.00 ry:  0.00 lt: 0.00 rt: 0.00 ".length();
+    public static final int LENGTH_OF_OMISSION = "ID: 1000 user:  1 lx:  0.00 ly:  0.00 rx:  0.00 ry:  0.00 lt: 0.00 rt: 0.00 ".length();
 
     private static final String NUMBER_FIELD_NAME;
 

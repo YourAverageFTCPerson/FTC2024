@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.vision;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
@@ -20,8 +22,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
+import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
+import java.io.PrintStream;
 
 /**
  * From the OpenCV Java Tutorial.
@@ -108,7 +112,20 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             // TODO Actually read the example
             // https://stackoverflow.com/questions/6301493/get-path-of-android-resource
             // https://stackoverflow.com/questions/7977348/how-to-get-uri-of-res-folder
-            this.faceCascade.load(String.valueOf(new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface")));
+
+            XmlPullParser xml = hardwareMap.appContext.getResources().getXml(R.xml.lbpcascade_frontalface);
+            System.out.println("xml: " + xml);
+
+            File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
+
+            try (PrintStream output = new PrintStream(file)) {
+                output.print(xml.getText());
+            } catch (Exception e) {
+                Log.wtf(FaceDetectorBecauseYes.UselessColorBoxDrawingTracker.class.getSimpleName(), e);
+                return;
+            }
+
+            this.faceCascade.load(file.getAbsolutePath());
         }
 
         private void detectAndDisplay(Mat frame) {

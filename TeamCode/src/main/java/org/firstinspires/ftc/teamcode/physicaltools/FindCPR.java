@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Find CPR", group = "Physical Tools")
 public class FindCPR extends LinearOpMode {
-    public static String motorName = "motor";
+    public static String motorName = "arm";
 
     @Override
     public void runOpMode() {
