@@ -21,24 +21,36 @@
 
 package org.firstinspires.ftc.teamcode.vision.eocvsim;
 
+import android.util.Log;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.R;
 import org.opencv.core.Mat;
+import org.opencv.core.MatOfByte;
+import org.opencv.core.MatOfPoint;
+import org.opencv.core.Scalar;
 import org.opencv.dnn.Dnn;
 import org.opencv.dnn.Net;
+import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-@TeleOp
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.List;
+
+@TeleOp(name = "DO NOT RUN")
 public class ObjectDetectionLearning extends LinearOpMode
 {
     OpenCvWebcam webcam;
+
+    private static final String TAG = SamplePipeline.class.getSimpleName();
 
     @Override
     public void runOpMode()
@@ -201,8 +213,20 @@ public class ObjectDetectionLearning extends LinearOpMode
 
         {
             // TODO
-            String raw = hardwareMap.appContext.getResources().openRawResource(R.raw.sampledetect);
+            byte[] b = null;
+            try (InputStream in = hardwareMap.appContext.getResources().openRawResource(R.raw.sampledetect)) {
+                b = new byte[in.available()];
+                in.read(b);
+            } catch (IOException e) {
+                Log.wtf(TAG, e);
+            }
+
+            this.net = Dnn.readNetFromONNX(new MatOfByte(b));
         }
+
+        Mat forwarded = new Mat();
+
+        private Scalar color = new Scalar(255, 0, 0);
 
         @Override
         public Mat processFrame(Mat input)
@@ -218,6 +242,10 @@ public class ObjectDetectionLearning extends LinearOpMode
             /*
              * Draw a simple box around the middle 1/2 of the entire frame
              */
+            net.setInput(input);
+            this.forwarded = net.forward();
+
+            Imgproc.drawContours(input, List.of(new MatOfPoint()), 0, this.color);
 
 
             return input;
