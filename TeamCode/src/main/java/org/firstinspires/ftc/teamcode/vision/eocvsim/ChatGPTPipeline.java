@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatGPTPipeline implements VisionProcessor {
+
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
 //        Log.d(ChatGPTPipeline.class.getSimpleName(), "Hello World!");
@@ -53,12 +54,11 @@ public class ChatGPTPipeline implements VisionProcessor {
     public Object processFrame(Mat frame, long captureTimeNanos) {
         Imgproc.putText(frame, "Hello World!", new Point(0, 100), Imgproc.FONT_HERSHEY_COMPLEX, 1, new Scalar(0, 0, 0), 1, Imgproc.LINE_4, false);
         List<MatOfPoint> contours = new ArrayList<>();
-//        Imgproc.cvtColor(contours, this.grayed, Imgproc.COLOR_RGB2GRAY)
-        Imgproc.findContours(frame, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
+        Imgproc.cvtColor(frame, this.grayed, Imgproc.COLOR_RGB2GRAY);
+        Imgproc.findContours(this.grayed, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         Object[] thing = max(contours);
         MatOfPoint largestContour = (MatOfPoint) thing[0];
         int index = (int) thing[1];
-        Imgproc.rectangle(frame, Imgproc.fitEllipseDirect(largestContour).boundingRect(), new Scalar(255, 0, 0));
         Imgproc.drawContours(frame, contours, index, new Scalar(0,255,0), 3);
         return frame;
     }
