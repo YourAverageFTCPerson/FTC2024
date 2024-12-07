@@ -3,12 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
 
 @TeleOp(name = "Blue Alliance TeleOp", group = "Competition")
 public class BlueAllianceCode extends LinearOpMode {
     private DcMotor motor; // 2 223s, 1 312
+    private Servo bucket;
 
 //    private static final int CONVERSION = 1;
 
@@ -23,7 +25,7 @@ public class BlueAllianceCode extends LinearOpMode {
 
 
     @EffectivelyFinal
-    public static Boolean USING_223 = false;
+    public static Boolean USING_223 = true;
 
     private DcMotor frontLeftMotor;
     private DcMotor backLeftMotor;
@@ -38,12 +40,13 @@ public class BlueAllianceCode extends LinearOpMode {
         this.backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
         this.motor = this.hardwareMap.get(DcMotor.class, "viperMotor");
         motor.setDirection(DcMotor.Direction.REVERSE);
-        final int fullExtension = (int) Math.round(REVOLUTIONS_FOR_FULL_EXTENSION * (USING_223 ? YELLOW_JACKET_223_PPR : YELLOW_JACKET_312_PPR));
+        final int fullExtension = (int) Math.round(REVOLUTIONS_FOR_FULL_EXTENSION * (USING_223 ? YELLOW_JACKET_223_PPR : YELLOW_JACKET_312_PPR)) - 500;
         this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.motor.setPower(0.0);
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor.setTargetPosition(0); // Return to original position
         this.motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        this.bucket = hardwareMap.get(Servo.class, "bucket");
 //        this.motor.setPower(1);
         this.waitForStart();
         int targetPosition = 0;
@@ -61,6 +64,11 @@ public class BlueAllianceCode extends LinearOpMode {
             telemetry.addData("motor", motor.getPower());
             telemetry.addData("stickval", stickval);
             telemetry.update();
+            if (gamepad2.right_bumper) {
+                bucket.setPosition(1.0);
+            } else {
+                bucket.setPosition(0.0);
+            }
             if (gamepad2.b) {
                 precise = !precise;
             }

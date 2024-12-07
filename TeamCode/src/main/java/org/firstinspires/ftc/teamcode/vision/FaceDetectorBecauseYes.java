@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.vision;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
@@ -22,7 +23,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.*;
 
@@ -113,11 +113,11 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             // TODO Actually read the example
             // xml was null because XmlResourceParser.getText() returns the current tag's text
 
-            try (InputStream input = hardwareMap.appContext.getResources().openRawResource(R.xml.lbpcascade_frontalface)) {
+            try (@SuppressLint("ResourceType") InputStream input = hardwareMap.appContext.getResources().openRawResource(R.xml.lbpcascade_frontalface)) {
                 File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
 
-                try (FileOuputStream output = new FileOutputStream(file)) {
-                    while (input.available()) {
+                try (FileOutputStream output = new FileOutputStream(file)) {
+                    while (input.available() != 0) {
                         output.write(input.read());
                     }
                 } catch (Exception e) {
@@ -126,6 +126,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
                 }
 
                 this.faceCascade.load(file.getAbsolutePath());
+            } catch (Exception e) {
             }
         }
 

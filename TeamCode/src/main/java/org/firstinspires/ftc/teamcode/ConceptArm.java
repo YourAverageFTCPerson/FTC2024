@@ -32,6 +32,8 @@ public class ConceptArm extends LinearOpMode {
             return;
         }
         long armDelay = temp;
+        temp = TweakableNumbers.NUMBERS.getOrDefault("dpad_left", 600L);
+        double armPower = temp / 1000;
         waitForStart();
 //
 //        Gamepad previousGamepad2 = new Gamepad();
@@ -63,7 +65,7 @@ public class ConceptArm extends LinearOpMode {
                 if (gamepad2.dpad_up) {
                     new Thread(() -> {
                         this.movingArm = true;
-                        arm.setPower(0.7);
+                        arm.setPower(armPower);
                         sleep(armDelay);
                         arm.setPower(0d);
                         this.movingArm = false;
@@ -71,7 +73,7 @@ public class ConceptArm extends LinearOpMode {
                 } else if (gamepad2.dpad_down) {
                     new Thread(() -> {
                         this.movingArm = true;
-                        arm.setPower(-0.7);
+                        arm.setPower(-armPower);
                         sleep(armDelay);
                         arm.setPower(0d);
                         this.movingArm = false;
