@@ -24,8 +24,7 @@ import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 import org.xmlpull.v1.XmlPullParser;
 
-import java.io.File;
-import java.io.PrintStream;
+import java.io.*;
 
 /**
  * From the OpenCV Java Tutorial.
@@ -35,6 +34,8 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
     OpenCvWebcam webcam;
     OpenCvTrackerApiPipeline trackerApiPipeline;
     UselessColorBoxDrawingTracker tracker1, tracker2, tracker3;
+
+    private static final String TAG = FaceDetectorBecauseYes.UselessColorBoxDrawingTracker.class.getSimpleName();
 
     @Override
     public void runOpMode() {
@@ -110,22 +111,22 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             this.faceCascade = new CascadeClassifier();
 
             // TODO Actually read the example
-            // https://stackoverflow.com/questions/6301493/get-path-of-android-resource
-            // https://stackoverflow.com/questions/7977348/how-to-get-uri-of-res-folder
+            // xml was null because XmlResourceParser.getText() returns the current tag's text
 
-            XmlPullParser xml = hardwareMap.appContext.getResources().getXml(R.xml.lbpcascade_frontalface);
-            System.out.println("xml: " + xml);
+            try (InputStream input = hardwareMap.appContext.getResources().openRawResource(R.xml.lbpcascade_frontalface)) {
+                File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
 
-            File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
+                try (FileOuputStream output = new FileOutputStream(file)) {
+                    while (input.available()) {
+                        output.write(input.read());
+                    }
+                } catch (Exception e) {
+                    Log.wtf(TAG, e);
+                    return;
+                }
 
-            try (PrintStream output = new PrintStream(file)) {
-                output.print(xml.getText());
-            } catch (Exception e) {
-                Log.wtf(FaceDetectorBecauseYes.UselessColorBoxDrawingTracker.class.getSimpleName(), e);
-                return;
+                this.faceCascade.load(file.getAbsolutePath());
             }
-
-            this.faceCascade.load(file.getAbsolutePath());
         }
 
         private void detectAndDisplay(Mat frame) {
@@ -168,13 +169,14 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
 //                            input.cols()*(3f/4f),
 //                            input.rows()*(3f/4f)),
 //                    color, 4);
-try {
-    if (!input.empty()) {
-        detectAndDisplay(input);
-    }
-} catch (Throwable tr) {
-    telemetry.addData("ERROR", tr.toString());
-}
+            try {
+                if (!input.empty()) {
+                    detectAndDisplay(input);
+                }
+            } catch (Throwable tr) {
+                telemetry.addData("ERROR", tr.toString());
+                Log.wtf(TAG, tr);
+            }
 
             return input;
         }
