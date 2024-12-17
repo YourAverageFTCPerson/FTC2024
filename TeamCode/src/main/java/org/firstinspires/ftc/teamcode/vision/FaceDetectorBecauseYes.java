@@ -24,7 +24,10 @@ import org.openftc.easyopencv.OpenCvTracker;
 import org.openftc.easyopencv.OpenCvTrackerApiPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileOutputStream;
 
 /**
  * From the OpenCV Java Tutorial.
@@ -99,6 +102,18 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
         }
     }
 
+    private static byte[] readAll(InputStream in) {
+        try {
+            int length = in.available();
+            byte[] b = new byte[length];
+            in.read(b);
+            return b;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+
     private class UselessColorBoxDrawingTracker extends OpenCvTracker {
         private final Scalar color;
 
@@ -113,19 +128,21 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
             // TODO Actually read the example
             // xml was null because XmlResourceParser.getText() returns the current tag's text
 
-            try (@SuppressLint("ResourceType") InputStream input = hardwareMap.appContext.getResources().openRawResource(R.xml.lbpcascade_frontalface)) {
+            try (@SuppressLint("ResourceType") InputStream input = hardwareMap.appContext.getResources().openRawResource(R.raw.lbpcascade_frontalface)) {
                 File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
 
                 try (FileOutputStream output = new FileOutputStream(file)) {
-                    while (input.available() != 0) {
-                        output.write(input.read());
-                    }
+                    byte[] all = readAll(input);
+                    System.out.println(new String(all));
+                    output.write(all);
                 } catch (Exception e) {
                     Log.wtf(TAG, e);
                     return;
                 }
 
-                this.faceCascade.load(file.getAbsolutePath());
+                file.createNewFile();
+
+                this.faceCascade.load(file.getPath());
             } catch (Exception e) {
             }
         }
