@@ -21,6 +21,8 @@
 
 package org.firstinspires.ftc.teamcode;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
 import android.util.Log;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -28,6 +30,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.R;
+import org.firstinspires.ftc.teamcode.util.Util;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfPoint;
@@ -41,20 +44,20 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvPipeline;
 import org.openftc.easyopencv.OpenCvWebcam;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
 @TeleOp
-public class ObjectDetectionLearning extends LinearOpMode
-{
+public class ObjectDetectionLearning extends LinearOpMode {
     OpenCvWebcam webcam;
 
     private static final String TAG = SamplePipeline.class.getSimpleName();
 
     @Override
-    public void runOpMode()
-    {
+    public void runOpMode() {
         /*
          * Instantiate an OpenCvCamera object for the camera we'll be using.
          * In this sample, we're using a webcam. Note that you will need to
@@ -88,11 +91,9 @@ public class ObjectDetectionLearning extends LinearOpMode
          * If you really want to open synchronously, the old method is still available.
          */
         webcam.setMillisecondsPermissionTimeout(5000); // Timeout for obtaining permission is configurable. Set before opening.
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
-        {
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener() {
             @Override
-            public void onOpened()
-            {
+            public void onOpened() {
                 /*
                  * Tell the webcam to start streaming images to us! Note that you must make sure
                  * the resolution you specify is supported by the camera. If it is not, an exception
@@ -113,8 +114,7 @@ public class ObjectDetectionLearning extends LinearOpMode
             }
 
             @Override
-            public void onError(int errorCode)
-            {
+            public void onError(int errorCode) {
                 /*
                  * This will be called if the camera could not be opened
                  */
@@ -129,8 +129,7 @@ public class ObjectDetectionLearning extends LinearOpMode
          */
         waitForStart();
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
             /*
              * Send some stats to the telemetry
              */
@@ -147,8 +146,7 @@ public class ObjectDetectionLearning extends LinearOpMode
              * when it will be automatically stopped for you) *IS* supported. The "if" statement
              * below will stop streaming from the camera when the "A" button on gamepad 1 is pressed.
              */
-            if(gamepad1.a)
-            {
+            if (gamepad1.a) {
                 /*
                  * IMPORTANT NOTE: calling stopStreaming() will indeed stop the stream of images
                  * from the camera (and, by extension, stop calling your vision pipeline). HOWEVER,
@@ -181,24 +179,8 @@ public class ObjectDetectionLearning extends LinearOpMode
         }
     }
 
-    /*
-     * An example image processing pipeline to be run upon receipt of each frame from the camera.
-     * Note that the processFrame() method is called serially from the frame worker thread -
-     * that is, a new camera frame will not come in while you're still processing a previous one.
-     * In other words, the processFrame() method will never be called multiple times simultaneously.
-     *
-     * However, the rendering of your processed image to the viewport is done in parallel to the
-     * frame worker thread. That is, the amount of time it takes to render the image to the
-     * viewport does NOT impact the amount of frames per second that your pipeline can process.
-     *
-     * IMPORTANT NOTE: this pipeline is NOT invoked on your OpMode thread. It is invoked on the
-     * frame worker thread. This should not be a problem in the vast majority of cases. However,
-     * if you're doing something weird where you do need it synchronized with your OpMode thread,
-     * then you will need to account for that accordingly.
-     */
-    class SamplePipeline extends OpenCvPipeline
-    {
-        boolean viewportPaused;
+    class SamplePipeline extends OpenCvPipeline {
+        private boolean viewportPaused;
 
         /*
          * NOTE: if you wish to use additional Mat objects in your processing pipeline, it is
@@ -209,28 +191,20 @@ public class ObjectDetectionLearning extends LinearOpMode
          * constantly allocating and freeing large chunks of memory.
          */
 
-        public Net net;
+        private final Net net;
 
         {
-            // TODO
-            byte[] b = null;
-            try (InputStream in = hardwareMap.appContext.getResources().openRawResource(R.raw.sampledetect)) {
-                b = new byte[in.available()];
-                in.read(b);
-            } catch (IOException e) {
-                Log.wtf(TAG, e);
+            try (@SuppressLint("ResourceType") InputStream input = hardwareMap.appContext.getResources().openRawResource(R.raw.sampledetect)) {
+                this.net = Dnn.readNetFromONNX(new MatOfByte(Util.readAll(input)));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
-
-            this.net = Dnn.readNetFromONNX(new MatOfByte(b));
         }
 
-        Mat forwarded = new Mat();
-
-        private Scalar color = new Scalar(255, 0, 0);
+//        private final Scalar color = new Scalar(255, 0, 0);
 
         @Override
-        public Mat processFrame(Mat input)
-        {
+        public Mat processFrame(Mat input) {
             /*
              * IMPORTANT NOTE: the input Mat that is passed in as a parameter to this method
              * will only dereference to the same image for the duration of this particular
@@ -239,21 +213,13 @@ public class ObjectDetectionLearning extends LinearOpMode
              * it to another Mat.
              */
 
-            /*
-             * Draw a simple box around the middle 1/2 of the entire frame
-             */
             net.setInput(input);
-            this.forwarded = net.forward();
 
-//            Imgproc.imshow("Image", this.forwarded);
-
-
-            return input;
+            return net.forward();
         }
 
         @Override
-        public void onViewportTapped()
-        {
+        public void onViewportTapped() {
             /*
              * The viewport (if one was specified in the constructor) can also be dynamically "paused"
              * and "resumed". The primary use case of this is to reduce CPU, memory, and power load
@@ -268,12 +234,9 @@ public class ObjectDetectionLearning extends LinearOpMode
 
             viewportPaused = !viewportPaused;
 
-            if(viewportPaused)
-            {
+            if (viewportPaused) {
                 webcam.pauseViewport();
-            }
-            else
-            {
+            } else {
                 webcam.resumeViewport();
             }
         }

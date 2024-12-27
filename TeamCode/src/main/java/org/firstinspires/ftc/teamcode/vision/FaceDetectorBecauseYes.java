@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.R;
+import org.firstinspires.ftc.teamcode.util.Util;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfRect;
 import org.opencv.core.Rect;
@@ -102,18 +103,6 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
         }
     }
 
-    private static byte[] readAll(InputStream in) {
-        try {
-            int length = in.available();
-            byte[] b = new byte[length];
-            in.read(b);
-            return b;
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-    }
-
     private class UselessColorBoxDrawingTracker extends OpenCvTracker {
         private final Scalar color;
 
@@ -132,7 +121,7 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
                 File file = new File(hardwareMap.appContext.getDir("cascade", Context.MODE_PRIVATE), "lbpcascade_frontalface.xml");
 
                 try (FileOutputStream output = new FileOutputStream(file)) {
-                    byte[] all = readAll(input);
+                    byte[] all = Util.readAll(input);
                     System.out.println(new String(all));
                     output.write(all);
                 } catch (Exception e) {
@@ -140,10 +129,12 @@ public class FaceDetectorBecauseYes extends LinearOpMode {
                     return;
                 }
 
+                //noinspection ResultOfMethodCallIgnored
                 file.createNewFile();
+                file.deleteOnExit();
 
                 this.faceCascade.load(file.getPath());
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
         }
 
