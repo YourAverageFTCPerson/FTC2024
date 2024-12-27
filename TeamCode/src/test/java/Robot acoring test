@@ -1,6 +1,0 @@
-CR servo. intake;
-CR servo. bucket;
-CR servo. ramp;
-//the cmds the need to run
-intake. setPower(gamepad_1_LeftStick_y);
-bucket.setPower (gamepad_2_LeftStick_Y);
