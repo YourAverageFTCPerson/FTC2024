@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.TweakableNumbers;
 
 import java.util.logging.Level;
@@ -15,8 +16,8 @@ import java.util.logging.Logger;
  * @see org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware
  */
 public class MecanumHardware {
-    public static final long DRIVING_MOTOR_COUNTS_PER_REVOLUTION = 525;
-    public static final double WHEEL_RADIUS = 5.08, WHEEL_CIRCUMFERENCE = 2 * Math.PI * WHEEL_RADIUS;
+    public static final long DRIVING_MOTOR_COUNTS_PER_REVOLUTION = 525L;
+    public static final double WHEEL_RADIUS = 5.0, WHEEL_CIRCUMFERENCE = MathUtils.TAU * WHEEL_RADIUS;
     public static final int COUNTS_PER_CM_OF_DRIVING_MOTORS = (int) (DRIVING_MOTOR_COUNTS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
     private Logger logger; // Per instance because OpMode.telemetry isn't a static variable.
