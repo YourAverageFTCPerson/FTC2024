@@ -43,6 +43,14 @@ public class MecanumHardware {
 
     private static final String CLASS_NAME = MecanumHardware.class.getName();
 
+    private boolean notInitialized = true;
+
+    private void checkInitialized() {
+        if (notInitialized) {
+            throw new IllegalStateException("Not initialized");
+        }
+    }
+
     public MecanumHardware(OpMode opMode) {
         Long temp;
         this.degreeError = ((temp = TweakableNumbers.NUMBERS.get("a ")) == null) ? degreeErrorByDefault : temp / 1000.0;
@@ -51,13 +59,16 @@ public class MecanumHardware {
     }
 
     public void initialize() {
+        if (true)
+            throw new UnsupportedOperationException("TODO verify IMU orientation");
+
         this.logger = Logger.getLogger(CLASS_NAME); // System.out gets redirected to Logcat
 
         this.logger.logp(Level.INFO, CLASS_NAME, "initialize", "Initializing hardware");
 
         this.logger.info("Initializing the imu variable");
         this.imu = this.opMode.hardwareMap.get(IMU.class, "imu");
-        this.imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT)));
+        this.imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT))); // TODO
         this.logger.info("imu initialized");
 
         this.logger.info("Initializing motor variables");
@@ -89,6 +100,8 @@ public class MecanumHardware {
     public void setPowers(double frontLeftPower, double backLeftPower, double frontRightPower, double backRightPower) {
         this.logger.entering(CLASS_NAME, "setPowers", new Object[] { frontLeftPower, backLeftPower, frontRightPower, backRightPower });
 
+        this.checkInitialized();
+
         this.frontLeftMotor.setPower(frontLeftPower);
         this.backLeftMotor.setPower(backLeftPower);
         this.frontRightMotor.setPower(frontRightPower);
@@ -99,6 +112,8 @@ public class MecanumHardware {
 
     public void driveWithPower(double y, double x, double rx) { // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#deriving-mecanum-control-equations
         this.logger.entering(CLASS_NAME, "driveWithPower", new Object[] { y, x, rx });
+
+        this.checkInitialized();
 
         // Denominator is the largest motor power (absolute value) or 1
         // This ensures all the powers maintain the same ratio,
@@ -117,17 +132,22 @@ public class MecanumHardware {
     public void turnUntilStopped(double power) {
         this.logger.entering(CLASS_NAME, "turnUntilStopped", power);
 
+        this.checkInitialized();
+
         this.setPowers(power, power, -power, -power);
 
         this.logger.exiting(CLASS_NAME, "turnUntilStopped");
     }
 
     public void brakeRobot() {
+        this.checkInitialized();
         this.setPowers(0.0, 0.0, 0.0, 0.0);
     }
 
     public void degreeTurnWithIMU(double amount) {
         this.logger.entering(CLASS_NAME, "degreeTurnWithIMU", amount);
+
+        this.checkInitialized();
 
         this.logger.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "degreeError: %f", this.degreeError);
 
@@ -146,6 +166,8 @@ public class MecanumHardware {
     public void radianTurnWithIMU(double amount) {
         this.logger.entering(CLASS_NAME, "radianTurnWithIMU", amount);
 
+        this.checkInitialized();
+
         this.logger.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "radianError: %f", this.radianError);
 
         this.imu.resetYaw();
@@ -163,6 +185,8 @@ public class MecanumHardware {
     public void resetDrivingEncoders() {
         this.logger.entering(CLASS_NAME, "resetDrivingEncoders");
 
+        this.checkInitialized();
+
         this.frontLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.backLeftMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -173,6 +197,8 @@ public class MecanumHardware {
 
     public void enableDrivingMotors() {
         this.logger.entering(CLASS_NAME, "reEnableDrivingMotors");
+
+        this.checkInitialized();
 
         this.frontLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backLeftMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -185,6 +211,8 @@ public class MecanumHardware {
     public void makeDrivingMotorsRunToPosition() {
         this.logger.entering(CLASS_NAME, "makeDrivingMotorsRunToPosition");
 
+        this.checkInitialized();
+
         this.frontLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.backLeftMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -195,6 +223,8 @@ public class MecanumHardware {
 
     public void moveWheels(int frontLeftDistance, int backLeftDistance, int frontRightDistance, int backRightDistance) {
         this.logger.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
+
+        this.checkInitialized();
 
         this.resetDrivingEncoders();
 
@@ -211,6 +241,8 @@ public class MecanumHardware {
     public void moveWheels(double frontLeftDistance, double backLeftDistance, double frontRightDistance, double backRightDistance) {
         this.logger.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
 
+        this.checkInitialized();
+
         this.moveWheels((int) Math.round(frontLeftDistance), (int) Math.round(backLeftDistance), (int) Math.round(frontRightDistance), (int) Math.round(backRightDistance));
 
         this.logger.exiting(CLASS_NAME, "moveWheels");
@@ -218,6 +250,8 @@ public class MecanumHardware {
 
     public void driveWithEncoders(double y, double x, double rx) {
         this.logger.entering(CLASS_NAME, "driveWithEncoders", new Object[] { y, x, rx });
+
+        this.checkInitialized();
 
         double frontLeftDistance = y + x + rx;
         double backLeftDistance = y - x + rx;
