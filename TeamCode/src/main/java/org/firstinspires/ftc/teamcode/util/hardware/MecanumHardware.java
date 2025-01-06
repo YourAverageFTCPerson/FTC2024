@@ -62,6 +62,10 @@ public class MecanumHardware {
         if (true)
             throw new UnsupportedOperationException("TODO verify IMU orientation");
 
+        if (!notInitialized) {
+            throw new IllegalStateException("Already initialized");
+        }
+
         this.logger = Logger.getLogger(CLASS_NAME); // System.out gets redirected to Logcat
 
         this.logger.logp(Level.INFO, CLASS_NAME, "initialize", "Initializing hardware");
@@ -95,6 +99,8 @@ public class MecanumHardware {
         this.logger.info("Motor variables initialized");
 
         this.logger.logp(Level.INFO, CLASS_NAME, "initialize", "Initialized hardware");
+
+        this.notInitialized = false;
     }
 
     public void setPowers(double frontLeftPower, double backLeftPower, double frontRightPower, double backRightPower) {

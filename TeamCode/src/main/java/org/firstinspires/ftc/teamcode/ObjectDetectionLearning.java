@@ -44,7 +44,7 @@ import java.io.InputStream;
 public class ObjectDetectionLearning extends LinearOpMode {
     OpenCvWebcam webcam;
 
-    private static final String TAG = SamplePipeline.class.getSimpleName();
+//    private static final String TAG = SamplePipeline.class.getSimpleName();
 
     @Override
     public void runOpMode() {
