@@ -52,14 +52,14 @@ public class ChatGPTPipeline implements VisionProcessor {
 
     @Override
     public Object processFrame(Mat frame, long captureTimeNanos) {
-        Imgproc.putText(frame, "Hello World!", new Point(0, 100), Imgproc.FONT_HERSHEY_COMPLEX, 1, new Scalar(0, 0, 0), 1, Imgproc.LINE_4, false);
         List<MatOfPoint> contours = new ArrayList<>();
         Imgproc.cvtColor(frame, this.grayed, Imgproc.COLOR_RGB2GRAY);
         Imgproc.findContours(this.grayed, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
         Object[] thing = max(contours);
         MatOfPoint largestContour = (MatOfPoint) thing[0];
+        Imgproc.putText(frame, largestContour.toString(), new Point(0, 100), Imgproc.FONT_HERSHEY_COMPLEX, 0.5, new Scalar(0, 0, 0), 1, Imgproc.LINE_4, false);
         int index = (int) thing[1];
-        Imgproc.drawContours(frame, contours, index, new Scalar(0,255,0), 3);
+//        Imgproc.drawContours(frame, contours, index, new Scalar(0,255,0), 3);
         return frame;
     }
 
