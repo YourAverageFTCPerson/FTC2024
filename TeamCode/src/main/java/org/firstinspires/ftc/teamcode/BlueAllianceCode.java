@@ -64,6 +64,12 @@ public class BlueAllianceCode extends LinearOpMode {
             telemetry.addData("motor", motor.getPower());
             telemetry.addData("stickval", stickval);
             telemetry.update();
+
+//            if (gamepad1.a) {
+//                motor.setTargetPosition();
+//                motor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                motor.setPower();
+//            }
             if (gamepad2.right_bumper) {
                 bucket.setPosition(1.0);
             } else {
@@ -148,6 +154,7 @@ public class BlueAllianceCode extends LinearOpMode {
             backLeftMotor.setPower(backLeftPower);
             frontRightMotor.setPower(frontRightPower);
             backRightMotor.setPower(backRightPower);
+
         }
     }
 }

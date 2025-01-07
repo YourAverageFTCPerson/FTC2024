@@ -20,7 +20,9 @@ public class MecanumHardware {
     public static final double WHEEL_RADIUS = 5.0, WHEEL_CIRCUMFERENCE = MathUtils.TAU * WHEEL_RADIUS;
     public static final int COUNTS_PER_CM_OF_DRIVING_MOTORS = (int) (DRIVING_MOTOR_COUNTS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE);
 
-    private Logger logger; // Per instance because OpMode.telemetry isn't a static variable.
+    private static final String CLASS_NAME = MecanumHardware.class.getName();
+
+    private static final Logger LOGGER = Logger.getLogger(CLASS_NAME);
 
     private final OpMode opMode;
 
@@ -41,8 +43,6 @@ public class MecanumHardware {
 
     public static double radianErrorByDefault = DEFAULT_RADIAN_ERROR;
 
-    private static final String CLASS_NAME = MecanumHardware.class.getName();
-
     private boolean notInitialized = true;
 
     private void checkInitialized() {
@@ -56,34 +56,31 @@ public class MecanumHardware {
         this.degreeError = ((temp = TweakableNumbers.NUMBERS.get("a ")) == null) ? degreeErrorByDefault : temp / 1000.0;
         this.radianError = ((temp = TweakableNumbers.NUMBERS.get("b ")) == null) ? radianErrorByDefault : temp / 1000.0;
         this.opMode = opMode;
+        this.initialize();
     }
 
     public void initialize() {
-        if (true)
-            throw new UnsupportedOperationException("TODO verify IMU orientation");
-
         if (!notInitialized) {
             throw new IllegalStateException("Already initialized");
         }
 
-        this.logger = Logger.getLogger(CLASS_NAME); // System.out gets redirected to Logcat
+        LOGGER.logp(Level.INFO, CLASS_NAME, "initialize", "Initializing hardware");
 
-        this.logger.logp(Level.INFO, CLASS_NAME, "initialize", "Initializing hardware");
-
-        this.logger.info("Initializing the imu variable");
+        LOGGER.info("Initializing the imu variable");
         this.imu = this.opMode.hardwareMap.get(IMU.class, "imu");
-        this.imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.RIGHT))); // TODO
-        this.logger.info("imu initialized");
 
-        this.logger.info("Initializing motor variables");
+        this.imu.initialize(new IMU.Parameters(new RevHubOrientationOnRobot(RevHubOrientationOnRobot.LogoFacingDirection.UP, RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD))); // TODO read this and trust
+        LOGGER.info("imu initialized");
+
+        LOGGER.info("Initializing motor variables");
 
         this.frontLeftMotor = this.opMode.hardwareMap.get(DcMotor.class, "frontLeftMotor");
         this.frontRightMotor = this.opMode.hardwareMap.get(DcMotor.class, "frontRightMotor");
         this.backLeftMotor = this.opMode.hardwareMap.get(DcMotor.class, "backLeftMotor");
         this.backRightMotor = this.opMode.hardwareMap.get(DcMotor.class, "backRightMotor");
 
-        this.frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-        this.backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+//        this.frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
+//        this.backRightMotor.setDirection(DcMotor.Direction.REVERSE);
 
         this.frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -96,15 +93,15 @@ public class MecanumHardware {
 
         this.enableDrivingMotors();
 
-        this.logger.info("Motor variables initialized");
+        LOGGER.info("Motor variables initialized");
 
-        this.logger.logp(Level.INFO, CLASS_NAME, "initialize", "Initialized hardware");
+        LOGGER.logp(Level.INFO, CLASS_NAME, "initialize", "Initialized hardware");
 
         this.notInitialized = false;
     }
 
     public void setPowers(double frontLeftPower, double backLeftPower, double frontRightPower, double backRightPower) {
-        this.logger.entering(CLASS_NAME, "setPowers", new Object[] { frontLeftPower, backLeftPower, frontRightPower, backRightPower });
+        LOGGER.entering(CLASS_NAME, "setPowers", new Object[] { frontLeftPower, backLeftPower, frontRightPower, backRightPower });
 
         this.checkInitialized();
 
@@ -113,11 +110,11 @@ public class MecanumHardware {
         this.frontRightMotor.setPower(frontRightPower);
         this.backRightMotor.setPower(backRightPower);
 
-        this.logger.exiting(CLASS_NAME, "setPowers");
+        LOGGER.exiting(CLASS_NAME, "setPowers");
     }
 
     public void driveWithPower(double y, double x, double rx) { // https://gm0.org/en/latest/docs/software/tutorials/mecanum-drive.html#deriving-mecanum-control-equations
-        this.logger.entering(CLASS_NAME, "driveWithPower", new Object[] { y, x, rx });
+        LOGGER.entering(CLASS_NAME, "driveWithPower", new Object[] { y, x, rx });
 
         this.checkInitialized();
 
@@ -132,17 +129,17 @@ public class MecanumHardware {
 
         this.setPowers(frontLeftPower, backLeftPower, frontRightPower, backRightPower);
 
-        this.logger.exiting(CLASS_NAME, "driveWithPower");
+        LOGGER.exiting(CLASS_NAME, "driveWithPower");
     }
 
     public void turnUntilStopped(double power) {
-        this.logger.entering(CLASS_NAME, "turnUntilStopped", power);
+        LOGGER.entering(CLASS_NAME, "turnUntilStopped", power);
 
         this.checkInitialized();
 
         this.setPowers(power, power, -power, -power);
 
-        this.logger.exiting(CLASS_NAME, "turnUntilStopped");
+        LOGGER.exiting(CLASS_NAME, "turnUntilStopped");
     }
 
     public void brakeRobot() {
@@ -151,11 +148,11 @@ public class MecanumHardware {
     }
 
     public void degreeTurnWithIMU(double amount) {
-        this.logger.entering(CLASS_NAME, "degreeTurnWithIMU", amount);
+        LOGGER.entering(CLASS_NAME, "degreeTurnWithIMU", amount);
 
         this.checkInitialized();
 
-        this.logger.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "degreeError: %f", this.degreeError);
+        LOGGER.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "degreeError: %f", this.degreeError);
 
         this.imu.resetYaw();
         this.turnUntilStopped(1.0);
@@ -166,15 +163,15 @@ public class MecanumHardware {
         }
         this.brakeRobot();
 
-        this.logger.exiting(CLASS_NAME, "degreeTurnWithIMU");
+        LOGGER.exiting(CLASS_NAME, "degreeTurnWithIMU");
     }
 
     public void radianTurnWithIMU(double amount) {
-        this.logger.entering(CLASS_NAME, "radianTurnWithIMU", amount);
+        LOGGER.entering(CLASS_NAME, "radianTurnWithIMU", amount);
 
         this.checkInitialized();
 
-        this.logger.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "radianError: %f", this.radianError);
+        LOGGER.logp(Level.FINE, CLASS_NAME, "degreeTurnWithIMU", "radianError: %f", this.radianError);
 
         this.imu.resetYaw();
         this.turnUntilStopped(1.0);
@@ -185,11 +182,11 @@ public class MecanumHardware {
         }
         this.brakeRobot();
 
-        this.logger.exiting(CLASS_NAME, "radianTurnWithIMU");
+        LOGGER.exiting(CLASS_NAME, "radianTurnWithIMU");
     }
 
     public void resetDrivingEncoders() {
-        this.logger.entering(CLASS_NAME, "resetDrivingEncoders");
+        LOGGER.entering(CLASS_NAME, "resetDrivingEncoders");
 
         this.checkInitialized();
 
@@ -198,11 +195,11 @@ public class MecanumHardware {
         this.frontRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.backRightMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        this.logger.exiting(CLASS_NAME, "resetDrivingEncoders");
+        LOGGER.exiting(CLASS_NAME, "resetDrivingEncoders");
     }
 
     public void enableDrivingMotors() {
-        this.logger.entering(CLASS_NAME, "reEnableDrivingMotors");
+        LOGGER.entering(CLASS_NAME, "reEnableDrivingMotors");
 
         this.checkInitialized();
 
@@ -211,11 +208,11 @@ public class MecanumHardware {
         this.frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        this.logger.exiting(CLASS_NAME, "reEnableDrivingMotors");
+        LOGGER.exiting(CLASS_NAME, "reEnableDrivingMotors");
     }
 
     public void makeDrivingMotorsRunToPosition() {
-        this.logger.entering(CLASS_NAME, "makeDrivingMotorsRunToPosition");
+        LOGGER.entering(CLASS_NAME, "makeDrivingMotorsRunToPosition");
 
         this.checkInitialized();
 
@@ -224,11 +221,11 @@ public class MecanumHardware {
         this.frontRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         this.backRightMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-        this.logger.exiting(CLASS_NAME, "makeDrivingMotorsRunToPosition");
+        LOGGER.exiting(CLASS_NAME, "makeDrivingMotorsRunToPosition");
     }
 
     public void moveWheels(int frontLeftDistance, int backLeftDistance, int frontRightDistance, int backRightDistance) {
-        this.logger.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
+        LOGGER.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
 
         this.checkInitialized();
 
@@ -241,21 +238,21 @@ public class MecanumHardware {
 
         this.makeDrivingMotorsRunToPosition();
 
-        this.logger.exiting(CLASS_NAME, "moveWheels");
+        LOGGER.exiting(CLASS_NAME, "moveWheels");
     }
 
     public void moveWheels(double frontLeftDistance, double backLeftDistance, double frontRightDistance, double backRightDistance) {
-        this.logger.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
+        LOGGER.entering(CLASS_NAME, "moveWheels", new Object[] { frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance });
 
         this.checkInitialized();
 
         this.moveWheels((int) Math.round(frontLeftDistance), (int) Math.round(backLeftDistance), (int) Math.round(frontRightDistance), (int) Math.round(backRightDistance));
 
-        this.logger.exiting(CLASS_NAME, "moveWheels");
+        LOGGER.exiting(CLASS_NAME, "moveWheels");
     }
 
     public void driveWithEncoders(double y, double x, double rx) {
-        this.logger.entering(CLASS_NAME, "driveWithEncoders", new Object[] { y, x, rx });
+        LOGGER.entering(CLASS_NAME, "driveWithEncoders", new Object[] { y, x, rx });
 
         this.checkInitialized();
 
@@ -266,6 +263,6 @@ public class MecanumHardware {
 
         this.moveWheels(frontLeftDistance, backLeftDistance, frontRightDistance, backRightDistance);
 
-        this.logger.exiting(CLASS_NAME, "driveWithEncoders");
+        LOGGER.exiting(CLASS_NAME, "driveWithEncoders");
     }
 }
