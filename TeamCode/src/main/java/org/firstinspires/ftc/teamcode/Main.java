@@ -13,7 +13,11 @@ public class Main extends LinearOpMode {
     public void runOpMode() {
         MecanumHardware mecanum = new MecanumHardware(this);
 
+        mecanum.initialize();
+
         ViperHardware viper = new ViperHardware(this);
+
+        viper.initialize();
 
         waitForStart();
 

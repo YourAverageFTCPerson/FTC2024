@@ -56,7 +56,6 @@ public class MecanumHardware {
         this.degreeError = ((temp = TweakableNumbers.NUMBERS.get("a ")) == null) ? degreeErrorByDefault : temp / 1000.0;
         this.radianError = ((temp = TweakableNumbers.NUMBERS.get("b ")) == null) ? radianErrorByDefault : temp / 1000.0;
         this.opMode = opMode;
-        this.initialize();
     }
 
     public void initialize() {
