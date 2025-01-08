@@ -15,8 +15,11 @@ public class JShellForAndroid extends LinearOpMode {
         Thread thread = new Thread(() -> {
             try (ServerSocket socket = new ServerSocket(90)) {
                 Socket s = socket.accept();
+                String line;
                 try (BufferedReader reader = new BufferedReader(new InputStreamReader(s.getInputStream()))) {
-                    
+                    while ((line = reader.readLine()) != null) {
+                        System.out.println(line);
+                    }
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
