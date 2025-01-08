@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.util.ViperHardware;
+import org.firstinspires.ftc.teamcode.util.hardware.ViperHardware;
 import org.firstinspires.ftc.teamcode.util.hardware.MecanumHardware;
 
 @TeleOp(name = "MecanumProgram v2", group = "Competition")
