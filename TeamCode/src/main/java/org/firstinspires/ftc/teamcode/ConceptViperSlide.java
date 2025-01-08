@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
+import org.firstinspires.ftc.teamcode.util.TweakableNumbers;
 
 /**
  *
@@ -13,25 +13,15 @@ import org.firstinspires.ftc.teamcode.util.EffectivelyFinal;
 public class ConceptViperSlide extends LinearOpMode { // 4 stage 336 mm
     private DcMotor motor; // 2 223s, 1 312
 
-//    private static final int CONVERSION = 1;
-
-    /**
-     * From goBUILDA website.
-     */
-    public static final float YELLOW_JACKET_312_PPR = 537.7f;
-
     public static final float YELLOW_JACKET_223_PPR = 751.8f;
 
-    public static final double REVOLUTIONS_FOR_FULL_EXTENSION = 8.1;
-
-    @EffectivelyFinal
-    public static Boolean USING_223 = true;
+    public static final float REVOLUTIONS_FOR_FULL_EXTENSION = 8.1f;
 
     @Override
     public void runOpMode() {
         this.motor = this.hardwareMap.get(DcMotor.class, "viperMotor");
         motor.setDirection(DcMotor.Direction.REVERSE);
-        final int fullExtension = (int) Math.round(REVOLUTIONS_FOR_FULL_EXTENSION * (USING_223 ? YELLOW_JACKET_223_PPR : YELLOW_JACKET_312_PPR)) - 500;
+        final int fullExtension = Math.round(REVOLUTIONS_FOR_FULL_EXTENSION * YELLOW_JACKET_223_PPR) - TweakableNumbers.NUMBERS.get("x ");
         this.motor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.motor.setPower(0.0);
         this.motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

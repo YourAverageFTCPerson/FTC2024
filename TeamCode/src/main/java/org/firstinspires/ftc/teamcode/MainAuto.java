@@ -50,6 +50,8 @@ public class MainAuto extends LinearOpMode {
 
         Viper viper = new Viper();
 
+        trajectories.turnTo()
+
         Actions.runBlocking(new SequentialAction(trajectories.build(), viper.ascend, viper.descend));
     }
 }
