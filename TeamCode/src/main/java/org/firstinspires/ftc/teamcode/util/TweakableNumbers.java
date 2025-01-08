@@ -12,7 +12,7 @@ import java.util.HashMap;
  * {@code HashMap} which holds {@code toString()}s of {@code gamepad1} with the substring starting
  * from index 0 and ending at index {@link TweakableNumbers#LENGTH_OF_OMISSION} (exclusive) removed.
  * {@snippet :
- * import org.firstinspires.ftc.team24388.util.TweakableNumbers;
+ * import org.firstinspires.ftc.teamcode.util.TweakableNumbers;
  * ...
  * // Get the value of the state with only dpad_down of gamepad1 down.
  * Long temp; // We use temp for a null check.
