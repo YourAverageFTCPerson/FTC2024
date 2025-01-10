@@ -104,7 +104,8 @@ public class MathUtils {
 
     public static double[] calculateRobotPosition(double relativeX, double relativeY,
                                                   double aprilTagOrientation, double aprilTagX, double aprilTagY) {
-        double[] predictedCoordinates = rotate2DVector(-aprilTagOrientation, relativeX, relativeY); // IntelliJ is smart enough to inline the negative negative. Right?
+        double[] predictedCoordinates = rotate2DVector(aprilTagOrientation, relativeX, relativeY);
+
         return new double[] { aprilTagX + predictedCoordinates[0], aprilTagY + predictedCoordinates[1] };
     }
 
