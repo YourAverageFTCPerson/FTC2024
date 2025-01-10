@@ -2,9 +2,14 @@ package average.ftc.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 
+import org.jetbrains.annotations.NotNull;
 import org.rowlandhall.meepmeep.MeepMeep;
+import org.rowlandhall.meepmeep.core.entity.Entity;
 import org.rowlandhall.meepmeep.roadrunner.DefaultBotBuilder;
+import org.rowlandhall.meepmeep.roadrunner.entity.MarkerIndicatorEntity;
 import org.rowlandhall.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
+import java.awt.Graphics2D;
 
 public class MeepMeepTesting {
     public static void main(String[] args) {
@@ -28,6 +33,7 @@ public class MeepMeepTesting {
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTOTHEDEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
+                .addEntity(new MarkerIndicatorEntity())
                 .addEntity(myBot)
                 .start();
     }

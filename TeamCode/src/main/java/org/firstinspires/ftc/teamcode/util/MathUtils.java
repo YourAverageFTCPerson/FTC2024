@@ -116,4 +116,14 @@ public class MathUtils {
                 MathUtils.getFieldAprilTagOrientation(detection.id),
                 detection.metadata.fieldPosition.get(0), detection.metadata.fieldPosition.get(1));
     }
+
+    public static double inchToCm(double inches) {
+        return inches * 2.54;
+    }
+
+    private static final double INVERSE_CONVERSION = 1 / 2.54;
+
+    public static double cmToInch(double cm) {
+        return cm * INVERSE_CONVERSION;
+    }
 }

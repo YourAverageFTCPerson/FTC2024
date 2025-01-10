@@ -13,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * NOTE: All lengths are in centimeters.
+ *
  * @see org.firstinspires.ftc.robotcontroller.external.samples.RobotHardware
  */
 public class MecanumHardware {
