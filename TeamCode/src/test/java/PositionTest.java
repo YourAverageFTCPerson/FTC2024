@@ -21,9 +21,9 @@ public class PositionTest {
         double x = 100.0, y = 123.0, aprilTagX = 81.0, aprilTagY = 90.0;
         double aprilTagOrientation = Math.toRadians(50.0);
 
-        double[] relativeCoordinates = MathUtils.rotate2DVector(aprilTagOrientation, x - aprilTagX, y - aprilTagY);
+        double[] coordinates = MathUtils.rotate2DVector(aprilTagOrientation, x - aprilTagX, y - aprilTagY);
         // Solution
-        assertEquals(List.of(x, y), List.of(Arrays.stream(MathUtils.calculateRobotPosition(relativeCoordinates[0], relativeCoordinates[1], aprilTagOrientation, aprilTagX, aprilTagY)).boxed().toArray(Double[]::new)));
+        assertEquals(List.of(coordinates[0], coordinates[1]), List.of(Arrays.stream(MathUtils.calculateRobotPosition(x, y, aprilTagOrientation, aprilTagX, aprilTagY)).boxed().toArray(Double[]::new)));
     }
 
     @Test

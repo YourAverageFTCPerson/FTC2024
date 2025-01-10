@@ -156,7 +156,7 @@ public class MainAutonomous extends LinearOpMode {
         AprilTagDetection detection = detections.get(0);
         double[] initialPosition = MathUtils.calculateRobotPosition(detection);
 
-        MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(initialPosition[0], initialPosition[1]));
+        MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(initialPosition[0], initialPosition[1], MathUtils.getFieldAprilTagOrientation(detection.id) + detection.ftcPose.yaw));
 
         TrajectoryActionBuilder trajectories = drive.actionBuilder(drive.localizer.getPose()).lineToX(50d);
 
