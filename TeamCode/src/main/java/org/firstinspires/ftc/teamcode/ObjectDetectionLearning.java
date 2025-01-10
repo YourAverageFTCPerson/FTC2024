@@ -23,6 +23,7 @@ package org.firstinspires.ftc.teamcode;
 
 import android.annotation.SuppressLint;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -40,6 +41,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 
 import java.io.InputStream;
 
+@Disabled
 @TeleOp
 public class ObjectDetectionLearning extends LinearOpMode {
     OpenCvWebcam webcam;
