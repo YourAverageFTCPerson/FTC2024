@@ -10,6 +10,11 @@ import java.util.Arrays;
  * @author YourAverageFTCPerson
  */
 public class MathUtils {
+    /**
+     * Straight to alliance neutral samples from AprilTag 12 or 15.
+     */
+    public static final double ANGLE_TO_GO_STRAIGHT = 0.605544663605; // arcsin(36/63.2455532034)
+
     protected MathUtils() { // Allow subclasses for extension (even though this is a utility class)
         throw new UnsupportedOperationException();
     }

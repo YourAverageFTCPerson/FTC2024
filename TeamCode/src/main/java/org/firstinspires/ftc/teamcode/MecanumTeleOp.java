@@ -3,9 +3,6 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.teamcode.util.TweakableNumbers;
 
 @TeleOp(name = "Basic Mecanum Drive")
 public class MecanumTeleOp extends LinearOpMode {
@@ -18,7 +15,7 @@ public class MecanumTeleOp extends LinearOpMode {
         DcMotor frontRightMotor = hardwareMap.dcMotor.get("frontRightMotor");
         DcMotor backRightMotor = hardwareMap.dcMotor.get("backRightMotor");
 
-        backLeftMotor.setDirection(DcMotorSimple.Direction.REVERSE); // USE "mecanum" config
+        backLeftMotor.setDirection(DcMotor.Direction.REVERSE); // USE "mecanum" config
 
         waitForStart();
 

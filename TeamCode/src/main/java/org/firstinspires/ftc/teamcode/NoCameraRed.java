@@ -13,14 +13,23 @@ import org.firstinspires.ftc.teamcode.util.hardware.GrabberActions;
 import org.firstinspires.ftc.teamcode.util.hardware.RampActions;
 import org.firstinspires.ftc.teamcode.util.hardware.ViperActions;
 
-@Disabled
+/**
+ * Assumptions:
+ * <ul>
+ *     <li>The robot starts with back to the AprilTag (ID 12 or 15) (just for alignment; no camera shenanigans)</li>
+ *     <li>Can also be blue alliance because both sides are symmetrical</li>
+ *     <li>The servo on the end of the ramp is called "grabber"</li>
+ *     <li>The ramp motor is called "ramp"</li>
+ *     <li>The viper motor is called "viperMotor"</li>
+ * </ul>
+ *
+ * <b>YOU HAVE TO WRITE THE CORRECT ENCODER VALUES FOR THE FOLLOWING</b>
+ * @see GrabberActions
+ * @see RampActions
+ * @see BucketActions
+ */
 @Autonomous
 public class NoCameraRed extends LinearOpMode {
-    /**
-     * Straight to alliance neutral samples
-     */
-    private static final double ANGLE_TO_GO_STRAIGHT = MathUtils.TAU / 2d - 0.605544663605; // arcsin(36/63.2455532034)
-
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(0d, -62d, MathUtils.TAU / 2d));
@@ -29,21 +38,17 @@ public class NoCameraRed extends LinearOpMode {
         GrabberActions grabberActions = new GrabberActions(this, "grabber");
         RampActions rampActions = new RampActions(this);
         BucketActions bucketActions = new BucketActions(this);
-        Actions.runBlocking(new SequentialAction(drive.actionBuilder(drive.localizer.getPose()).turnTo(ANGLE_TO_GO_STRAIGHT)
-                .lineToX(-52d) // Follow a straight line forward to x=-52 (yaw=ANGLE_TO_GO_STRAIGHT)
+        Actions.runBlocking(new SequentialAction(drive.actionBuilder(drive.localizer.getPose())
+                .turnTo(MathUtils.TAU / 2d - MathUtils.ANGLE_TO_GO_STRAIGHT)
+                .lineToX(-52d) // Follow a straight line forward to x=-52 (yaw=ANGLE_TO_GO_STRAIGHT radians from starting orientation)
                 .turnTo(MathUtils.TAU / 2d)
                 .build(),
-                grabberActions.open,
-                grabberActions.close,
-                rampActions.lift,
+                grabberActions.open, grabberActions.close, rampActions.lift,
                 drive.actionBuilder(new Pose2d(-52, -26, MathUtils.TAU / 2d))
-                .lineToY(-62d)
-                .turnTo(MathUtils.TAU / 8d) // Back facing basket
-                .build(),
-                viperActions.ascend,
-                bucketActions.tilt,
-                bucketActions.right,
-                viperActions.descend,
+                        .lineToY(-62d)
+                        .turnTo(MathUtils.TAU / 8d) // Back facing basket
+                        .build(),
+                viperActions.ascend, bucketActions.tilt, bucketActions.right, viperActions.descend,
                 rampActions.lower) // Could be moved
         );
     }
