@@ -2,6 +2,7 @@ package average.ftc.meepmeeptesting;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.util.MathUtil;
 
 import org.jetbrains.annotations.NotNull;
 import org.rowlandhall.meepmeep.MeepMeep;
@@ -32,7 +33,7 @@ public class MeepMeepTesting {
         .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(0, -62, -0.605544663605 + Math.PI))
                 .lineTo(new Vector2d(-52, -26))
                 .lineTo(new Vector2d(-52, -62))
-                .turn(-Math.PI/4)
+                .turn(0.605544663605 - Math.toRadians(135d))
                 .build());
 
 
