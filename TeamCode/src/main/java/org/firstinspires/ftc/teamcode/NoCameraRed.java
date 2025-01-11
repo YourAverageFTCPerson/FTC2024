@@ -36,7 +36,7 @@ public class NoCameraRed extends LinearOpMode {
                 grabberActions.open,
                 grabberActions.close,
                 rampActions.lift,
-                drive.actionBuilder(drive.localizer.getPose())
+                drive.actionBuilder(new Pose2d(-52, -26, MathUtils.TAU / 2d))
                 .lineToY(-62d)
                 .turnTo(MathUtils.TAU / 8d) // Back facing basket
                 .build(),
