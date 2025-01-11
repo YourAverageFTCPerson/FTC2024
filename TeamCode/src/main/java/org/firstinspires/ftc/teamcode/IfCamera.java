@@ -18,6 +18,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.util.MathUtils;
 import org.firstinspires.ftc.teamcode.util.hardware.MecanumHardware;
+import org.firstinspires.ftc.teamcode.util.hardware.ViperActions;
 import org.firstinspires.ftc.teamcode.util.hardware.ViperHardware;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -37,30 +38,6 @@ public class IfCamera extends LinearOpMode {
      * The variable to store our instance of the vision portal.
      */
     private VisionPortal visionPortal;
-
-    public class Viper {
-        private final ViperHardware hardware = new ViperHardware(IfCamera.this);
-
-        private boolean notInitialized = true;
-
-        public final Action ascend = t -> {
-            if (notInitialized) {
-                hardware.initialize();
-                notInitialized = false;
-            }
-            hardware.extend();
-            return false;
-        };
-
-        public final Action descend = t -> {
-            if (notInitialized) {
-                hardware.initialize();
-                notInitialized = false;
-            }
-            hardware.retract();
-            return false;
-        };
-    }
 
     /**
      * Initialize the AprilTag processor.
@@ -162,10 +139,10 @@ public class IfCamera extends LinearOpMode {
 
         waitForStart();
 
-        Viper viper = new Viper();
+        ViperActions viperActions = new ViperActions(this);
 
 //        trajectories.turnTo() // TODO
 
-        Actions.runBlocking(new SequentialAction(trajectories.build(), viper.ascend, viper.descend));
+        Actions.runBlocking(new SequentialAction(trajectories.build(), viperActions.ascend, viperActions.descend));
     }
 }

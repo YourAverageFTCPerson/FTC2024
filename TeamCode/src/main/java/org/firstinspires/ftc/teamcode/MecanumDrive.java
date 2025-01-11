@@ -44,6 +44,7 @@ import org.firstinspires.ftc.teamcode.messages.DriveCommandMessage;
 import org.firstinspires.ftc.teamcode.messages.MecanumCommandMessage;
 import org.firstinspires.ftc.teamcode.messages.MecanumLocalizerInputsMessage;
 import org.firstinspires.ftc.teamcode.messages.PoseMessage;
+import org.firstinspires.ftc.teamcode.util.MathUtils;
 
 import java.lang.Math;
 import java.util.Arrays;
@@ -62,9 +63,9 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.BACKWARD;
 
         // drive model parameters
-        public double inPerTick = 1;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = MathUtils.TAU * MathUtils.cmToInch(5.0) / 134.4;
+        public double lateralInPerTick = inPerTick - 50d; // Impossible to determine theoretically
+        public double trackWidthTicks = 366d * 2d / (MathUtils.TAU * 5d) / 134.4 ;
 
         // feedforward parameters (in tick units)
         public double kS = 0;

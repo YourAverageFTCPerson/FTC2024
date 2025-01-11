@@ -29,8 +29,10 @@ public class MeepMeepTesting {
 //                        .forward(30)
 //                        .turn(Math.toRadians(90))
 //                        .build());
-        .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
-                .lineTo(new Vector2d(20, 10))
+        .followTrajectorySequence(drive -> drive.trajectorySequenceBuilder(new Pose2d(0, -62, -0.605544663605 + Math.PI))
+                .lineTo(new Vector2d(-52, -26))
+                .lineTo(new Vector2d(-52, -62))
+                .turn(-Math.PI/4)
                 .build());
 
 
