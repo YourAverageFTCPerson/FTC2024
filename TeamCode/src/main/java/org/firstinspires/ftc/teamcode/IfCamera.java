@@ -27,7 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Autonomous
-public class MainAutonomous extends LinearOpMode {
+public class IfCamera extends LinearOpMode {
     /**
      * The variable to store our instance of the AprilTag processor.
      */
@@ -39,7 +39,7 @@ public class MainAutonomous extends LinearOpMode {
     private VisionPortal visionPortal;
 
     public class Viper {
-        private final ViperHardware hardware = new ViperHardware(MainAutonomous.this);
+        private final ViperHardware hardware = new ViperHardware(IfCamera.this);
 
         private boolean notInitialized = true;
 
@@ -124,10 +124,10 @@ public class MainAutonomous extends LinearOpMode {
 
     }   // end method initAprilTag()
 
-    private static final HashMap<Integer, Double> APRIL_TAG_HEADINGS = new HashMap<Integer, Double>() {
+    public static final HashMap<Integer, Double> APRIL_TAG_HEADINGS = new HashMap<Integer, Double>() {
         {
-            put(12, 0d);
-            put(15, Math.PI);
+            put(12, 0d); // Blue
+            put(15, Math.PI); // Red
         }
     };
 
@@ -145,7 +145,7 @@ public class MainAutonomous extends LinearOpMode {
         initAprilTag();
         List<AprilTagDetection> detections = aprilTag.getDetections();
         if (detections.size() != 1) {
-            Log.wtf("MainAutonomous", "NO APRILTAG DETECTED");
+            Log.wtf("IfCamera", "NO APRILTAG DETECTED");
             this.telemetry.addData("FATAL ERROR", "NO APRILTAG DETECTED");
             this.telemetry.update();
             while (!isStopRequested()) {
@@ -156,7 +156,7 @@ public class MainAutonomous extends LinearOpMode {
         AprilTagDetection detection = detections.get(0);
         double[] initialPosition = MathUtils.calculateRobotPosition(detection);
 
-        MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(initialPosition[0], initialPosition[1], MathUtils.getFieldAprilTagOrientation(detection.id) + detection.ftcPose.yaw));
+        MecanumDrive drive = new MecanumDrive(this.hardwareMap, new Pose2d(initialPosition[0], initialPosition[1], MathUtils.getFieldAprilTagOrientation(detection.id) + detection.ftcPose.bearing));
 
         TrajectoryActionBuilder trajectories = drive.actionBuilder(drive.localizer.getPose()).lineToX(50d);
 

@@ -80,8 +80,8 @@ public class MecanumHardware {
         this.backLeftMotor = this.opMode.hardwareMap.get(DcMotor.class, "backLeftMotor");
         this.backRightMotor = this.opMode.hardwareMap.get(DcMotor.class, "backRightMotor");
 
-//        this.frontRightMotor.setDirection(DcMotor.Direction.REVERSE);
-//        this.backRightMotor.setDirection(DcMotor.Direction.REVERSE);
+        this.frontLeftMotor.setDirection(DcMotor.Direction.REVERSE);
+        this.backLeftMotor.setDirection(DcMotor.Direction.REVERSE);
 
         this.frontLeftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.frontRightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
