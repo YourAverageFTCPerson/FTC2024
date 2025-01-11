@@ -200,7 +200,7 @@ public class MecanumHardware {
     }
 
     public void enableDrivingMotors() {
-        LOGGER.entering(CLASS_NAME, "reEnableDrivingMotors");
+        LOGGER.entering(CLASS_NAME, "enableDrivingMotors");
 
         this.checkInitialized();
 
@@ -209,7 +209,7 @@ public class MecanumHardware {
         this.frontRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.backRightMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        LOGGER.exiting(CLASS_NAME, "reEnableDrivingMotors");
+        LOGGER.exiting(CLASS_NAME, "enableDrivingMotors");
     }
 
     public void makeDrivingMotorsRunToPosition() {
