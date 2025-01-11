@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.SequentialAction;
-import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -9,7 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.util.MathUtils;
+import org.firstinspires.ftc.teamcode.util.hardware.BucketActions;
 import org.firstinspires.ftc.teamcode.util.hardware.GrabberActions;
+import org.firstinspires.ftc.teamcode.util.hardware.RampActions;
 import org.firstinspires.ftc.teamcode.util.hardware.ViperActions;
 
 @Disabled
@@ -26,16 +27,24 @@ public class NoCameraRed extends LinearOpMode {
         waitForStart();
         ViperActions viperActions = new ViperActions(this);
         GrabberActions grabberActions = new GrabberActions(this, "grabber");
+        RampActions rampActions = new RampActions(this);
+        BucketActions bucketActions = new BucketActions(this);
         Actions.runBlocking(new SequentialAction(drive.actionBuilder(drive.localizer.getPose()).turnTo(ANGLE_TO_GO_STRAIGHT)
-                .lineToX(-52d)
-                .turnTo(0d).build(),
+                .lineToX(-52d) // Follow a straight line forward to x=-52 (yaw=ANGLE_TO_GO_STRAIGHT)
+                .turnTo(0d)
+                .build(),
                 grabberActions.open,
                 grabberActions.close,
+                rampActions.lift,
                 drive.actionBuilder(drive.localizer.getPose())
-                .lineToY(-62d).turnTo(-MathUtils.TAU / 8d)
+                .lineToY(-62d)
+                .turnTo(-MathUtils.TAU / 8d) // Back facing basket
                 .build(),
                 viperActions.ascend,
-                viperActions.descend)
+                bucketActions.tilt,
+                bucketActions.right,
+                viperActions.descend,
+                rampActions.lower) // Could be moved
         );
     }
 }
